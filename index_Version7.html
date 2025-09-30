@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Titan Cloht</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f6f6fb; color: #21212b; margin: 0; padding: 0; }
+    header { background: #21212b; color: #fff; padding: 1em 0; text-align: center; }
+    nav { margin: 1em 0; }
+    nav button { margin: 0 0.5em; padding: 0.5em 1em; background: #6d51e0; border: none; color: #fff; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background .2s; }
+    nav button:hover { background: #422ab6; }
+    main { max-width: 1200px; margin: 2em auto; padding: 1em; background: #fff; border-radius: 10px; min-height: 60vh; box-shadow: 0 2px 12px #0001; }
+    .panel { margin-bottom: 2em; }
+    .opts { margin-bottom: 1em; }
+    .upload { margin-bottom: 1em; }
+    .upload input[type="file"] { margin-right: 1em; }
+    .modelo-2d { margin: 1em auto; display: flex; justify-content: center; align-items: center; background: #f0f0fc; border-radius: 12px; box-shadow: 0 1px 8px #0001; width: fit-content; padding: 1em; position: relative; }
+    .modelo-prenda { position: relative; width: 470px; height: 350px; }
+    .modelo-prenda img { position: absolute; top: 0; left: 0; }
+    .modelo-prenda .superpuesta { z-index: 2; opacity: 0.7; }
+    .modelo-prenda .base { z-index: 1; }
+    .accesorio-svg { position: absolute; top: 0; left: 0; z-index: 3; pointer-events: none; }
+    .hidden { display: none !important; }
+    footer { text-align: center; color: #888; font-size: 0.9em; background: #f6f6fb; margin-top: 2em; padding: 1em 0 0.5em 0; }
+    select, label { font-size: 1em; }
+    @media (max-width: 600px) {
+      .modelo-prenda { width: 320px; height: 240px; }
+      main { padding: 0.5em; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Titan Cloht</h1>
+    <nav>
+      <button onclick="showSection('camisetas')">Camisetas</button>
+      <button onclick="showSection('pantalones')">Pantalones</button>
+      <button onclick="showSection('buzos')">Buzos</button>
+      <button onclick="showSection('interior-hombre')">Calzoncillos</button>
+      <button onclick="showSection('interior-mujer')">Lencería Mujer</button>
+    </nav>
+  </header>
+  <main>
+    <!-- Camisetas -->
+    <section id="camisetas" class="panel">
+      <h2>Camisetas</h2>
+      <div class="opts">
+        <label>Estilo:
+          <select id="camiseta-estilo" onchange="updateCamisetaAccesorio()">
+            <option value="chompa">Chompa</option>
+            <option value="manga">Manga larga</option>
+            <option value="cuerdas">Con cuerdas</option>
+            <option value="sinmangas">Sin mangas</option>
+          </select>
+        </label>
+      </div>
+      <div class="upload">
+        <input type="file" accept="image/*" onchange="loadImage(event, 'camiseta')" />
+        <input placeholder="Pega una URL de imagen" onblur="loadUrlImage(this.value, 'camiseta')" />
+      </div>
+      <div class="modelo-2d">
+        <div class="modelo-prenda" style="width:470px; height:296px;">
+          <img id="base-camiseta" class="base" src="https://sdmntprcentralus.oaiusercontent.com/files/00000000-fc38-61f5-97f8-958dc7cdf38a/raw?se=2025-09-30T01%3A54%3A07Z&sp=r&sv=2024-08-04&sr=b&scid=16d7aee8-7632-56d2-9f83-1a789d36043d&skoid=9063adf3-a524-4acf-b70a-8731b33f2f50&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-09-29T23%3A20%3A53Z&ske=2025-09-30T23%3A20%3A53Z&sks=b&skv=2024-08-04&sig=29%2Bi4qN36/F2aQ2UQexD7BKTnAZ44zQIEObzf27EQVM%3D" width="470" height="296" alt="Camiseta modelo base">
+          <img id="img-camiseta" class="superpuesta" src="" width="470" height="296" style="display:none;" alt="Diseño subido">
+          <svg id="accesorio-camiseta" class="accesorio-svg" width="470" height="296"></svg>
+        </div>
+      </div>
+    </section>
+    <!-- Pantalones -->
+    <section id="pantalones" class="panel" style="display:none">
+      <h2>Pantalones</h2>
+      <div class="opts">
+        <label>Estilo:
+          <select id="pantalon-estilo" onchange="updatePantalonAccesorio()">
+            <option value="cargo">Cargo</option>
+            <option value="bolsillos">Bolsillos</option>
+            <option value="holgado">Holgado</option>
+            <option value="pegado">Pegado</option>
+          </select>
+        </label>
+      </div>
+      <div class="upload">
+        <input type="file" accept="image/*" onchange="loadImage(event, 'pantalon')" />
+        <input placeholder="Pega una URL de imagen" onblur="loadUrlImage(this.value, 'pantalon')" />
+      </div>
+      <div class="modelo-2d">
+        <div class="modelo-prenda" style="width:368px; height:296px;">
+          <img id="base-pantalon" class="base" src="https://sdmntprcentralus.oaiusercontent.com/files/00000000-2cf0-61f5-b772-5086f8781fc7/raw?se=2025-09-30T01%3A54%3A07Z&sp=r&sv=2024-08-04&sr=b&scid=dd491097-7c59-50a2-9620-1caab6751445&skoid=9063adf3-a524-4acf-b70a-8731b33f2f50&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-09-29T23%3A21%3A37Z&ske=2025-09-30T23%3A21%3A37Z&sks=b&skv=2024-08-04&sig=SVCGWuSTqTWqmv4/h4lJfwH5sYiI2/yA7PFlYpFxmQ4%3D" width="368" height="296" alt="Pantalón modelo base">
+          <img id="img-pantalon" class="superpuesta" src="" width="368" height="296" style="display:none;" alt="Diseño subido">
+          <svg id="accesorio-pantalon" class="accesorio-svg" width="368" height="296"></svg>
+        </div>
+      </div>
+    </section>
+    <!-- Buzos -->
+    <section id="buzos" class="panel" style="display:none">
+      <h2>Buzos</h2>
+      <div class="opts">
+        <label>Accesorio:
+          <select id="buzo-estilo" onchange="updateBuzoAccesorio()">
+            <option value="cordones">Cordones</option>
+            <option value="tiras">Tiras estilo cargo</option>
+            <option value="bolsillos">Bolsillos</option>
+          </select>
+        </label>
+      </div>
+      <div class="upload">
+        <input type="file" accept="image/*" onchange="loadImage(event, 'buzo')" />
+        <input placeholder="Pega una URL de imagen" onblur="loadUrlImage(this.value, 'buzo')" />
+      </div>
+      <div class="modelo-2d">
+        <div class="modelo-prenda" style="width:558px; height:360px;">
+          <img id="base-buzo" class="base" src="https://sdmntprnorthcentralus.oaiusercontent.com/files/00000000-9554-622f-b6ed-070f511787a3/raw?se=2025-09-30T01%3A54%3A07Z&sp=r&sv=2024-08-04&sr=b&scid=64d7b2c7-831e-5e82-9398-87661d62bfbd&skoid=9063adf3-a524-4acf-b70a-8731b33f2f50&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-09-29T23%3A23%3A18Z&ske=2025-09-30T23%3A23%3A18Z&sks=b&skv=2024-08-04&sig=Z0zBnXqJWya0QbEAXFqxnzwgnmWnEJdEUOIFtpkon5k%3D" width="558" height="360" alt="Buzo modelo base">
+          <img id="img-buzo" class="superpuesta" src="" width="558" height="360" style="display:none;" alt="Diseño subido">
+          <svg id="accesorio-buzo" class="accesorio-svg" width="558" height="360"></svg>
+        </div>
+      </div>
+    </section>
+    <!-- Interior Hombre -->
+    <section id="interior-hombre" class="panel" style="display:none">
+      <h2>Calzoncillos (Hombre)</h2>
+      <div class="opts">
+        <label>Estilo:
+          <select id="hombre-estilo">
+            <option>Clásico</option>
+            <option>Boxer</option>
+          </select>
+        </label>
+        <!-- Puedes agregar más accesorios aquí -->
+      </div>
+      <div class="upload">
+        <input type="file" accept="image/*" onchange="loadImage(event, 'hombre')" />
+        <input placeholder="Pega una URL de imagen" onblur="loadUrlImage(this.value, 'hombre')" />
+      </div>
+      <div class="modelo-2d">
+        <div class="modelo-prenda" style="width:470px; height:296px;">
+          <img id="base-hombre" class="base" src="https://sdmntprcentralus.oaiusercontent.com/files/00000000-5970-61f5-8dfc-11d82d971352/raw?se=2025-09-30T01%3A54%3A07Z&sp=r&sv=2024-08-04&sr=b&scid=6652235f-0815-5145-907d-e623c0ba72ea&skoid=9063adf3-a524-4acf-b70a-8731b33f2f50&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-09-29T23%3A21%3A20Z&ske=2025-09-30T23%3A21%3A20Z&sks=b&skv=2024-08-04&sig=fUsvYCCHyF8AiN2H9GURQJnMs%2BCk7vE48XyvoTFuOWI%3D" width="470" height="296" alt="Calzoncillo modelo base">
+          <img id="img-hombre" class="superpuesta" src="" width="470" height="296" style="display:none;" alt="Diseño subido">
+        </div>
+      </div>
+    </section>
+    <!-- Interior Mujer -->
+    <section id="interior-mujer" class="panel" style="display:none">
+      <h2>Lencería Mujer (Sostenes y Bragas)</h2>
+      <div class="opts">
+        <label>Prenda:
+          <select id="mujer-prenda" onchange="updateModeloMujer()">
+            <option value="sosten">Sostén</option>
+            <option value="braga">Braga</option>
+          </select>
+        </label>
+        <label>Extra:
+          <select id="mujer-extra" onchange="updateModeloMujer()">
+            <option value="">Ninguna</option>
+            <option value="tiritas">Tiritas</option>
+            <option value="encaje">Encaje</option>
+            <option value="transparencias">Transparencias</option>
+          </select>
+        </label>
+      </div>
+      <div class="upload">
+        <input type="file" accept="image/*" onchange="loadImage(event, 'mujer')" />
+        <input placeholder="Pega una URL de imagen" onblur="loadUrlImage(this.value, 'mujer')" />
+      </div>
+      <div class="modelo-2d">
+        <div class="modelo-prenda" id="modelo-mujer-img" style="width:502px; height:402px;">
+          <img id="base-mujer" class="base" src="https://sdmntprcentralus.oaiusercontent.com/files/00000000-a330-61f5-af73-6b95244f1f9b/raw?se=2025-09-30T01%3A54%3A07Z&sp=r&sv=2024-08-04&sr=b&scid=6c107ecc-5560-552a-893a-a93300dd4b7a&skoid=9063adf3-a524-4acf-b70a-8731b33f2f50&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-09-29T23%3A21%3A37Z&ske=2025-09-30T23%3A21%3A37Z&sks=b&skv=2024-08-04&sig=klAi4W1ZPkxHRtMQutkUhmXROoVFspZ7%2BP73nZcaqnQ%3D" width="502" height="402" alt="Lencería modelo base">
+          <img id="img-mujer" class="superpuesta" src="" width="502" height="402" style="display:none;" alt="Diseño subido">
+          <svg id="accesorio-mujer" class="accesorio-svg" width="502" height="402"></svg>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 Titan Cloht. Todos los derechos reservados.</p>
+  </footer>
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('main .panel').forEach(sec => sec.style.display = 'none');
+      document.getElementById(id).style.display = '';
+    }
+    function loadImage(event, prenda) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) { setImageSrc(e.target.result, prenda); }
+      reader.readAsDataURL(file);
+    }
+    function loadUrlImage(url, prenda) {
+      if (url && (url.startsWith('http://') || url.startsWith('https://'))) { setImageSrc(url, prenda); }
+    }
+    function setImageSrc(src, prenda) {
+      let id = '';
+      switch(prenda) {
+        case 'camiseta': id = 'img-camiseta'; break;
+        case 'pantalon': id = 'img-pantalon'; break;
+        case 'buzo': id = 'img-buzo'; break;
+        case 'hombre': id = 'img-hombre'; break;
+        case 'mujer': id = 'img-mujer'; break;
+      }
+      if (id) {
+        const img = document.getElementById(id);
+        if(img) {
+          img.src = src;
+          img.style.display = 'block';
+        }
+      }
+    }
+
+    // Accesorios para camiseta
+    function updateCamisetaAccesorio() {
+      const svg = document.getElementById('accesorio-camiseta');
+      const estilo = document.getElementById('camiseta-estilo').value;
+      let inner = '';
+      if(estilo === "cuerdas") {
+        // Cuerdas en el cuello
+        inner = `<line x1="230" y1="70" x2="200" y2="130" stroke="#555" stroke-width="7" />
+                 <line x1="240" y1="70" x2="270" y2="130" stroke="#555" stroke-width="7" />`;
+      } else if(estilo === "manga") {
+        // Mangas largas (simples líneas)
+        inner = `<rect x="35" y="120" width="55" height="150" rx="30" fill="#222" opacity="0.15"/>
+                 <rect x="380" y="120" width="55" height="150" rx="30" fill="#222" opacity="0.15"/>`;
+      } else if(estilo === "sinmangas") {
+        // Quita mangas (simple efecto)
+        inner = `<rect x="35" y="50" width="55" height="160" fill="#fff" opacity="0.5"/>
+                 <rect x="380" y="50" width="55" height="160" fill="#fff" opacity="0.5"/>`;
+      }
+      svg.innerHTML = inner;
+    }
+
+    // Accesorios para pantalón
+    function updatePantalonAccesorio() {
+      const svg = document.getElementById('accesorio-pantalon');
+      const estilo = document.getElementById('pantalon-estilo').value;
+      let inner = '';
+      if(estilo === "cargo") {
+        // Bolsillos cargo laterales
+        inner = `<rect x="30" y="200" width="60" height="40" rx="10" fill="#555" opacity="0.25"/>
+                 <rect x="278" y="200" width="60" height="40" rx="10" fill="#555" opacity="0.25"/>`;
+      } else if(estilo === "bolsillos") {
+        // Más bolsillos frontales
+        inner = `<rect x="70" y="110" width="45" height="30" rx="7" fill="#aaa" opacity="0.3"/>
+                 <rect x="250" y="110" width="45" height="30" rx="7" fill="#aaa" opacity="0.3"/>`;
+      } else if(estilo === "holgado") {
+        // Sombra extra para simular holgado
+        inner = `<ellipse cx="184" cy="260" rx="120" ry="35" fill="#000" opacity="0.1"/>`;
+      } else if(estilo === "pegado") {
+        // Líneas para simular pegado
+        inner = `<line x1="170" y1="80" x2="170" y2="290" stroke="#222" stroke-width="5" opacity="0.3"/>
+                 <line x1="200" y1="80" x2="200" y2="290" stroke="#222" stroke-width="5" opacity="0.3"/>`;
+      }
+      svg.innerHTML = inner;
+    }
+
+    // Accesorios para buzo
+    function updateBuzoAccesorio() {
+      const svg = document.getElementById('accesorio-buzo');
+      const estilo = document.getElementById('buzo-estilo').value;
+      let inner = '';
+      if(estilo === "cordones") {
+        // Cordones centrales
+        inner = `<line x1="279" y1="80" x2="279" y2="190" stroke="#fff" stroke-width="7"/>
+                 <circle cx="279" cy="190" r="10" fill="#fff" />`;
+      } else if(estilo === "tiras") {
+        // Tiras tipo cargo laterales
+        inner = `<rect x="60" y="220" width="30" height="60" rx="7" fill="#777" opacity="0.25"/>
+                 <rect x="470" y="220" width="30" height="60" rx="7" fill="#777" opacity="0.25"/>`;
+      } else if(estilo === "bolsillos") {
+        // Bolsillos grandes frontales
+        inner = `<rect x="150" y="240" width="270" height="60" rx="20" fill="#ddd" opacity="0.4" stroke="#aaa" stroke-width="3"/>`;
+      }
+      svg.innerHTML = inner;
+    }
+
+    // Accesorios para lencería mujer
+    function updateModeloMujer() {
+      const svg = document.getElementById('accesorio-mujer');
+      const prenda = document.getElementById('mujer-prenda').value;
+      const extra = document.getElementById('mujer-extra').value;
+      let inner = '';
+      if(prenda === "sosten") {
+        if(extra === "tiritas") {
+          // Tiritas en sostén
+          inner = `<line x1="160" y1="40" x2="110" y2="10" stroke="hotpink" stroke-width="5"/>
+                   <line x1="340" y1="40" x2="390" y2="10" stroke="hotpink" stroke-width="5"/>`;
+        } else if(extra === "encaje") {
+          // Encaje: líneas decorativas
+          inner = `<ellipse cx="250" cy="50" rx="110" ry="35" fill="none" stroke="#fa6" stroke-width="8" stroke-dasharray="8,8"/>`;
+        } else if(extra === "transparencias") {
+          // Transparencias: velo rosa claro
+          inner = `<ellipse cx="250" cy="100" rx="160" ry="60" fill="#f9a" opacity="0.18"/>`;
+        }
+      } else if(prenda === "braga") {
+        if(extra === "tiritas") {
+          inner = `<line x1="100" y1="340" x2="50" y2="390" stroke="hotpink" stroke-width="7"/>
+                   <line x1="400" y1="340" x2="450" y2="390" stroke="hotpink" stroke-width="7"/>`;
+        } else if(extra === "encaje") {
+          inner = `<ellipse cx="250" cy="370" rx="110" ry="25" fill="none" stroke="#fa6" stroke-width="8" stroke-dasharray="8,8"/>`;
+        } else if(extra === "transparencias") {
+          inner = `<ellipse cx="250" cy="390" rx="160" ry="25" fill="#f9a" opacity="0.18"/>`;
+        }
+      }
+      svg.innerHTML = inner;
+    }
+
+    // Inicializa
+    showSection('camisetas');
+    updateCamisetaAccesorio();
+    updatePantalonAccesorio();
+    updateBuzoAccesorio();
+    updateModeloMujer();
+
+    // Actualiza accesorios al cargar
+    document.getElementById('camiseta-estilo').addEventListener('change', updateCamisetaAccesorio);
+    document.getElementById('pantalon-estilo').addEventListener('change', updatePantalonAccesorio);
+    document.getElementById('buzo-estilo').addEventListener('change', updateBuzoAccesorio);
+    document.getElementById('mujer-prenda').addEventListener('change', updateModeloMujer);
+    document.getElementById('mujer-extra').addEventListener('change', updateModeloMujer);
+  </script>
+</body>
+</html>
